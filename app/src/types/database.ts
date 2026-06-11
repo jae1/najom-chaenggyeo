@@ -29,6 +29,6 @@ export interface SkinCare {
 export interface PushSubscription {
   id: string;
   user_id: string;
-  subscription: any;
+  subscription: Record<string, unknown>;
   created_at: string;
 }

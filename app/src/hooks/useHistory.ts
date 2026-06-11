@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import type { DailyHealth, SkinCare } from '../types/database';
@@ -14,7 +14,7 @@ export const useHistory = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     if (!user) return;
 
     const [healthRes, skinRes] = await Promise.all([
@@ -51,11 +51,12 @@ export const useHistory = () => {
 
     setHistory(sortedHistory);
     setLoading(false);
-  };
+  }, [user]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchHistory();
-  }, [user]);
+  }, [fetchHistory]);
 
   return { history, loading, refetch: fetchHistory };
 };

@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-import { User, LogOut, ExternalLink, ShieldCheck, Heart } from 'lucide-react';
+import { User, LogOut, ShieldCheck } from 'lucide-react';
 
 const Profile = () => {
   const { user, signOut } = useAuth();
