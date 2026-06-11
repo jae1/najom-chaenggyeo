@@ -1,9 +1,8 @@
-import React from 'react';
 import { useHistory } from '../hooks/useHistory';
 import HealthCharts from '../components/HealthCharts';
 import { Calendar, ChevronRight, Droplets, Dumbbell, Scale, Sparkles, Moon } from 'lucide-react';
 
-const History: React.FC = () => {
+const History = () => {
   const { history, loading } = useHistory();
 
   if (loading) {

@@ -1,9 +1,8 @@
-import React from 'react';
 import DailyHealthForm from '../components/DailyHealthForm';
 import SkinCareForm from '../components/SkinCareForm';
 import PushNotificationPrompt from '../components/PushNotificationPrompt';
 
-const Today: React.FC = () => {
+const Today = () => {
   return (
     <div className="pb-24 pt-4">
       <header className="py-6 px-2">

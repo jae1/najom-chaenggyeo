@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase';
 import { Heart } from 'lucide-react';
 
-const Login: React.FC = () => {
+const Login = () => {
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

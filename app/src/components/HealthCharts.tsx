@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, 
   CartesianGrid, Tooltip, ResponsiveContainer, Cell 
@@ -9,7 +8,7 @@ interface HealthChartsProps {
   data: HistoryItem[];
 }
 
-const HealthCharts: React.FC<HealthChartsProps> = ({ data }) => {
+const HealthCharts = ({ data }: HealthChartsProps) => {
   // Take last 7 days and reverse for chronological order in chart
   const chartData = [...data].slice(0, 7).reverse().map(item => ({
     date: item.date.split('-').slice(1).join('/'),
