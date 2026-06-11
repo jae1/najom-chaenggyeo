@@ -1,63 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../hooks/useAuth';
-import type { DailyHealth, SkinCare } from '../types/database';
-import { Calendar, ChevronRight, Droplets, Dumbbell, Scale, Heart, Sparkles } from 'lucide-react';
-
-interface HistoryItem {
-  date: string;
-  health?: DailyHealth;
-  skin?: SkinCare;
-}
+import React from 'react';
+import { useHistory } from '../hooks/useHistory';
+import HealthCharts from '../components/HealthCharts';
+import { Calendar, ChevronRight, Droplets, Dumbbell, Scale, Sparkles, Moon } from 'lucide-react';
 
 const History: React.FC = () => {
-  const { user } = useAuth();
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchHistory = async () => {
-      if (!user) return;
-
-      const [healthRes, skinRes] = await Promise.all([
-        supabase
-          .from('daily_health')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('date', { ascending: false }),
-        supabase
-          .from('skin_care')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('date', { ascending: false })
-      ]);
-
-      const healthData = healthRes.data || [];
-      const skinData = skinRes.data || [];
-
-      // Merge by date
-      const dateMap: Record<string, HistoryItem> = {};
-      
-      healthData.forEach(h => {
-        if (!dateMap[h.date]) dateMap[h.date] = { date: h.date };
-        dateMap[h.date].health = h;
-      });
-
-      skinData.forEach(s => {
-        if (!dateMap[s.date]) dateMap[s.date] = { date: s.date };
-        dateMap[s.date].skin = s;
-      });
-
-      const sortedHistory = Object.values(dateMap).sort((a, b) => 
-        b.date.localeCompare(a.date)
-      );
-
-      setHistory(sortedHistory);
-      setLoading(false);
-    };
-
-    fetchHistory();
-  }, [user]);
+  const { history, loading } = useHistory();
 
   if (loading) {
     return <div className="flex items-center justify-center h-[60vh]">기록 불러오는 중...</div>;
@@ -72,7 +19,11 @@ const History: React.FC = () => {
         <p className="text-gray-500 mt-2 font-medium">지금까지의 변화를 확인해보세요.</p>
       </header>
 
-      <div className="space-y-4">
+      {/* Charts Section */}
+      {history.length > 0 && <HealthCharts data={history} />}
+
+      <h2 className="text-lg font-bold text-gray-800 mb-4 px-2">상세 기록 리스트</h2>
+      <div className="space-y-4 px-1">
         {history.length === 0 ? (
           <div className="bg-white rounded-2xl p-12 text-center text-gray-400 border border-dashed border-gray-200">
             아직 기록이 없습니다.<br/>오늘의 나를 먼저 챙겨보세요!
@@ -85,7 +36,10 @@ const History: React.FC = () => {
                   <Calendar size={18} className="text-primary-400 mr-2" />
                   {new Date(item.date).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}
                 </div>
-                <ChevronRight size={18} className="text-gray-300" />
+                <div className="flex items-center">
+                   {item.health?.period && <span className="mr-2 text-xs">🩸</span>}
+                   <ChevronRight size={18} className="text-gray-300" />
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -99,6 +53,11 @@ const History: React.FC = () => {
                     {item.health.water_intake > 0 && (
                       <div className="flex items-center bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
                         <Droplets size={12} className="mr-1" /> {item.health.water_intake}ml
+                      </div>
+                    )}
+                    {item.health.sleep_hours && (
+                      <div className="flex items-center bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">
+                        <Moon size={12} className="mr-1" /> {item.health.sleep_hours}h
                       </div>
                     )}
                     {item.health.exercise_done && (

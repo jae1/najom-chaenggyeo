@@ -96,6 +96,25 @@ const SkinCareForm: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <div className="bg-gray-50 p-4 rounded-xl">
+        <label className="block text-sm font-medium text-gray-700 mb-3">오늘의 피부 상태</label>
+        <div className="flex justify-between gap-2">
+          {['좋음', '평범', '건조', '트러블', '민감'].map((status) => (
+            <button
+              key={status}
+              onClick={() => setData({ ...data, skin_status: status })}
+              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                data.skin_status === status 
+                  ? 'bg-blue-500 text-white shadow-sm' 
+                  : 'bg-white text-gray-400 border border-gray-100'
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         {routines.map((item) => (
           <button

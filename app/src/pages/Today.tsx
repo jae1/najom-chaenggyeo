@@ -1,6 +1,7 @@
 import React from 'react';
 import DailyHealthForm from '../components/DailyHealthForm';
 import SkinCareForm from '../components/SkinCareForm';
+import PushNotificationPrompt from '../components/PushNotificationPrompt';
 
 const Today: React.FC = () => {
   return (
@@ -14,6 +15,8 @@ const Today: React.FC = () => {
           {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
         </p>
       </header>
+
+      <PushNotificationPrompt />
 
       <section className="bg-white rounded-[2.5rem] p-8 shadow-sm mb-8 border border-pink-50">
         <h2 className="text-xl font-bold mb-6 flex items-center text-gray-800">

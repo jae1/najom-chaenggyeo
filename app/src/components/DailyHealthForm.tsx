@@ -137,6 +137,36 @@ const DailyHealthForm: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
+        <div className="bg-indigo-50 p-4 rounded-xl">
+          <div className="flex items-center mb-2">
+            <Moon className="text-indigo-500 mr-2" size={18} />
+            <span className="text-sm font-medium">수면 시간</span>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="number"
+              step="0.5"
+              value={data.sleep_hours}
+              onChange={(e) => setData({ ...data, sleep_hours: e.target.value })}
+              placeholder="0"
+              className="w-full bg-transparent border-b border-indigo-200 text-center focus:outline-none focus:border-indigo-500 font-bold"
+            />
+            <span className="text-xs text-gray-400 ml-1">h</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setData({ ...data, period: !data.period })}
+          className={`flex flex-col items-center justify-center p-4 rounded-xl transition-all ${
+            data.period ? 'bg-red-50 border-2 border-red-300 shadow-sm' : 'bg-gray-50 border-2 border-transparent'
+          }`}
+        >
+          <span className={`text-lg mb-1 ${data.period ? 'opacity-100' : 'opacity-30'}`}>🩸</span>
+          <span className={`text-sm font-medium ${data.period ? 'text-red-600' : 'text-gray-500'}`}>생리 중</span>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <button
           onClick={() => setData({ ...data, exercise_done: !data.exercise_done })}
           className={`flex flex-col items-center justify-center p-4 rounded-xl transition-all ${
