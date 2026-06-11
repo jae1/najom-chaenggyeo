@@ -3,7 +3,7 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, 
   CartesianGrid, Tooltip, ResponsiveContainer, Cell 
 } from 'recharts';
-import { HistoryItem } from '../hooks/useHistory';
+import type { HistoryItem } from '../hooks/useHistory';
 
 interface HealthChartsProps {
   data: HistoryItem[];

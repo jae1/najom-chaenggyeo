@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { Droplets, Dumbbell, Scale, Moon, Smile } from 'lucide-react';
@@ -21,7 +21,7 @@ const DailyHealthForm: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
-      const { data: existingData, error } = await supabase
+      const { data: existingData } = await supabase
         .from('daily_health')
         .select('*')
         .eq('user_id', user.id)

@@ -1,6 +1,5 @@
-import React from 'react';
 import { supabase } from '../lib/supabase';
-import { LogIn } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 const Login: React.FC = () => {
   const handleGoogleLogin = async () => {
@@ -17,6 +16,9 @@ const Login: React.FC = () => {
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-primary-600 mb-2">나좀챙겨</h1>
+        <div className="flex justify-center mb-4">
+          <Heart size={48} className="text-primary-400" />
+        </div>
         <p className="text-gray-600 italic">"매일매일 나를 아끼는 습관"</p>
       </div>
       

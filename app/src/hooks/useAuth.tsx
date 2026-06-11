@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 
@@ -19,8 +19,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const mockUser = {
       id: '00000000-0000-0000-0000-000000000000',
       email: 'user@example.com',
-      user_metadata: { full_name: 'Guest User' }
-    } as User;
+      user_metadata: { full_name: 'Guest User' },
+      app_metadata: {},
+      aud: 'authenticated',
+      created_at: new Date().toISOString()
+    } as unknown as User;
 
     setUser(mockUser);
     setLoading(false);

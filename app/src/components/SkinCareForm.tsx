@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { Sparkles, Scissors, Zap, Heart } from 'lucide-react';
 
+interface SkinCareData {
+  scalp: boolean;
+  gua_sha: boolean;
+  face_yoga: boolean;
+  ems: boolean;
+  skin_status: string;
+  skin_care_notes: string;
+}
+
 const SkinCareForm: React.FC = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({
+  const [data, setData] = useState<SkinCareData>({
     scalp: false,
     gua_sha: false,
     face_yoga: false,
@@ -20,7 +30,7 @@ const SkinCareForm: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
-      const { data: existingData, error } = await supabase
+      const { data: existingData } = await supabase
         .from('skin_care')
         .select('*')
         .eq('user_id', user.id)
@@ -87,7 +97,7 @@ const SkinCareForm: React.FC = () => {
     setLoading(false);
   };
 
-  const routines = [
+  const routines: { key: keyof SkinCareData; label: string; icon: ReactNode; color: string }[] = [
     { key: 'scalp', label: '두피 케어', icon: <Scissors className="text-orange-500" />, color: 'bg-orange-50' },
     { key: 'gua_sha', label: '괄사', icon: <Heart className="text-pink-500" />, color: 'bg-pink-50' },
     { key: 'face_yoga', label: '페이스 요가', icon: <Sparkles className="text-blue-500" />, color: 'bg-blue-50' },
@@ -119,7 +129,12 @@ const SkinCareForm: React.FC = () => {
         {routines.map((item) => (
           <button
             key={item.key}
-            onClick={() => setData({ ...data, [item.key]: !data[item.key] })}
+            onClick={() => {
+              const key = item.key as keyof SkinCareData;
+              if (typeof data[key] === 'boolean') {
+                setData({ ...data, [key]: !data[key] });
+              }
+            }}
             className={`flex items-center p-4 rounded-xl transition-all ${
               data[item.key] ? `${item.color} border-2 border-current shadow-sm` : 'bg-gray-50 border-2 border-transparent'
             }`}

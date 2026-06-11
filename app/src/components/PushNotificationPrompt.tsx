@@ -5,7 +5,9 @@ import { Bell, BellOff, CheckCircle2 } from 'lucide-react';
 
 const PushNotificationPrompt: React.FC = () => {
   const { user } = useAuth();
-  const [permission, setPermission] = useState<NotificationPermission>(Notification.permission);
+  const [permission, setPermission] = useState<NotificationPermission>(
+    typeof Notification !== 'undefined' ? Notification.permission : 'default'
+  );
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +26,7 @@ const PushNotificationPrompt: React.FC = () => {
   }, [user]);
 
   const subscribe = async () => {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    if (typeof Notification === 'undefined' || !('serviceWorker' in navigator) || !('PushManager' in window)) {
       alert('이 브라우저는 푸시 알림을 지원하지 않습니다.');
       return;
     }
@@ -35,15 +37,8 @@ const PushNotificationPrompt: React.FC = () => {
       setPermission(result);
 
       if (result === 'granted') {
-        const registration = await navigator.serviceWorker.ready;
-        
-        // In a real app, you would get this from your server/Supabase secrets
-        // For now, this is a placeholder. You need to generate your own VAPID keys.
-        const vapidPublicKey = 'YOUR_VAPID_PUBLIC_KEY'; 
-        
         // This part would normally subscribe the user to the push manager
         // and then save the subscription object to Supabase.
-        // Since we don't have real VAPID keys yet, we'll simulate the save.
         
         if (user) {
           await supabase.from('push_subscriptions').upsert({
