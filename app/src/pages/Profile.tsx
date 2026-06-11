@@ -39,10 +39,10 @@ const Profile = () => {
       </div>
 
       <button
-        onClick={() => {
+        onClick={async () => {
           if (window.confirm('로그아웃 하시겠습니까?')) {
-            signOut();
-            window.location.reload(); // Re-trigger auth check
+            await signOut();
+            // Optional: window.location.href = '/' to cleanly reset routing state
           }
         }}
         className="w-full flex items-center justify-center bg-gray-100 text-gray-500 font-bold py-5 rounded-[2rem] hover:bg-gray-200 transition-all active:scale-95"
