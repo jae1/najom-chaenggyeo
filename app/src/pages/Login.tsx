@@ -23,8 +23,12 @@ const Login = () => {
           },
         },
       });
-      if (error) alert(error.message);
-      else alert('회원가입 확인 메일을 보냈습니다! 메일함을 확인해주세요.');
+      if (error) {
+        alert(error.message);
+      } else {
+        alert('회원가입이 완료되었습니다! 로그인해주세요.');
+        setIsSignUp(false); // Switch to login view after successful signup
+      }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
         email,

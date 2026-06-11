@@ -34,23 +34,8 @@ const Profile = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-50 mb-8">
-        <h3 className="text-lg font-bold text-gray-800 mb-6 italic">"나를 아끼는 습관, 나좀챙겨"</h3>
-        
-        <div className="space-y-3">
-          <a 
-            href="https://github.com/jae1/najom-chaenggyeo" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-colors"
-          >
-            <div className="flex items-center text-gray-700">
-              <Heart size={20} className="mr-3" />
-              <span className="font-medium">GitHub 저장소</span>
-            </div>
-            <ExternalLink size={16} className="text-gray-300" />
-          </a>
-        </div>
+      <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-50 mb-8 text-center">
+        <h3 className="text-lg font-bold text-gray-800 italic">"나를 아끼는 습관, 나좀챙겨"</h3>
       </div>
 
       <button
