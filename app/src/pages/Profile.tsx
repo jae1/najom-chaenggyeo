@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { User, LogOut, Github, ExternalLink, ShieldCheck } from 'lucide-react';
+import { User, LogOut, ExternalLink, ShieldCheck, Heart } from 'lucide-react';
 
 const Profile: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -46,7 +46,7 @@ const Profile: React.FC = () => {
             className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-colors"
           >
             <div className="flex items-center text-gray-700">
-              <Github size={20} className="mr-3" />
+              <Heart size={20} className="mr-3" />
               <span className="font-medium">GitHub 저장소</span>
             </div>
             <ExternalLink size={16} className="text-gray-300" />
