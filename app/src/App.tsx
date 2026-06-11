@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import Today from './pages/Today';
 import History from './pages/History';
+import Profile from './pages/Profile';
 import BottomNav from './components/BottomNav';
 
 const queryClient = new QueryClient();
@@ -25,7 +26,7 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route path="/" element={<Today />} />
         <Route path="/history" element={<History />} />
-        <Route path="/profile" element={<div>내 정보 페이지 (준비 중)</div>} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />
