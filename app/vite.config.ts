@@ -10,7 +10,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'icons.svg'],
       manifest: {
-        name: '나좀챙겨 (Take Care of Me)',
+        name: '나좀챙겨',
         short_name: '나좀챙겨',
         description: '매일매일 나를 아끼는 건강 & 스킨케어 기록 습관',
         theme_color: '#ec4899',
