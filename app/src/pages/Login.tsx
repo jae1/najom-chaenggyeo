@@ -1,41 +1,110 @@
+import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Heart } from 'lucide-react';
+import { Heart, Mail, Lock, User, ArrowRight } from 'lucide-react';
 
 const Login = () => {
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-    if (error) console.error('Error logging in:', error.message);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
+      });
+      if (error) alert(error.message);
+      else alert('회원가입 확인 메일을 보냈습니다! 메일함을 확인해주세요.');
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) alert('로그인 실패: ' + error.message);
+    }
+    setLoading(false);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-primary-600 mb-2">나좀챙겨</h1>
+    <div className="flex flex-col items-center justify-center min-h-[90vh] px-6 text-center">
+      <div className="mb-10">
         <div className="flex justify-center mb-4">
-          <Heart size={48} className="text-primary-400" />
+          <div className="bg-pink-100 p-4 rounded-[2rem] shadow-sm">
+            <Heart size={48} className="text-primary-500 fill-primary-500" />
+          </div>
         </div>
-        <p className="text-gray-600 italic">"매일매일 나를 아끼는 습관"</p>
+        <h1 className="text-4xl font-black text-gray-900 mb-2">나좀챙겨</h1>
+        <p className="text-gray-500 font-medium italic">"나를 사랑하는 가장 쉬운 방법"</p>
       </div>
       
+      <form onSubmit={handleAuth} className="w-full max-w-sm space-y-4">
+        {isSignUp && (
+          <div className="relative">
+            <User className="absolute left-4 top-4 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="이름"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full bg-white border border-gray-100 rounded-2xl py-4 pl-12 pr-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+              required
+            />
+          </div>
+        )}
+
+        <div className="relative">
+          <Mail className="absolute left-4 top-4 text-gray-400" size={20} />
+          <input
+            type="email"
+            placeholder="이메일"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-white border border-gray-100 rounded-2xl py-4 pl-12 pr-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+            required
+          />
+        </div>
+
+        <div className="relative">
+          <Lock className="absolute left-4 top-4 text-gray-400" size={20} />
+          <input
+            type="password"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full bg-white border border-gray-100 rounded-2xl py-4 pl-12 pr-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-primary-500 text-white font-bold py-5 rounded-[2rem] shadow-lg shadow-pink-100 hover:bg-primary-600 active:scale-95 transition-all flex items-center justify-center disabled:bg-gray-300"
+        >
+          {loading ? '처리 중...' : isSignUp ? '시작하기' : '로그인'}
+          <ArrowRight size={20} className="ml-2" />
+        </button>
+      </form>
+
       <button
-        onClick={handleGoogleLogin}
-        className="flex items-center justify-center w-full max-w-xs bg-white border border-gray-300 rounded-lg shadow-sm px-6 py-3 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+        onClick={() => setIsSignUp(!isSignUp)}
+        className="mt-8 text-sm font-bold text-gray-400 hover:text-primary-500 transition-colors"
       >
-        <img 
-          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
-          alt="Google" 
-          className="w-5 h-5 mr-3"
-        />
-        Google로 시작하기
+        {isSignUp ? '이미 계정이 있으신가요? 로그인하기' : '처음이신가요? 회원가입하기'}
       </button>
       
-      <div className="mt-12 text-sm text-gray-400">
-        <p>로그인하여 오늘의 건강과<br/>피부 루틴을 기록해보세요.</p>
+      <div className="mt-12 text-xs text-gray-300">
+        <p>오늘의 건강과 피부 루틴을 기록하고<br/>나만의 변화를 확인해보세요.</p>
       </div>
     </div>
   );
