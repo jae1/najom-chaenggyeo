@@ -53,10 +53,38 @@ const SkinCareForm: React.FC = () => {
       ems: data.ems,
       skin_status: data.skin_status,
       skin_care_notes: data.skin_care_notes,
-    });
+    }, { onConflict: 'user_id,date' });
+    
     setLoading(false);
     if (error) alert('저장 실패: ' + error.message);
-    else alert('오늘의 피부 루틴이 저장되었습니다! ✨');
+    else alert('오늘의 피부 루틴이 업데이트되었습니다! ✨');
+  };
+
+  const handleReset = async () => {
+    if (!window.confirm('오늘의 피부 루틴 기록을 삭제할까요?')) return;
+    if (!user) return;
+    
+    setLoading(true);
+    const { error } = await supabase
+      .from('skin_care')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('date', today);
+    
+    if (!error) {
+      setData({
+        scalp: false,
+        gua_sha: false,
+        face_yoga: false,
+        ems: false,
+        skin_status: '',
+        skin_care_notes: '',
+      });
+      alert('오늘의 피부 기록이 초기화되었습니다.');
+    } else {
+      alert('초기화 실패: ' + error.message);
+    }
+    setLoading(false);
   };
 
   const routines = [
@@ -93,13 +121,22 @@ const SkinCareForm: React.FC = () => {
         />
       </div>
 
-      <button
-        onClick={handleSave}
-        disabled={loading}
-        className="w-full bg-blue-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-600 active:scale-95 transition-all disabled:bg-gray-300"
-      >
-        {loading ? '저장 중...' : '오늘의 루틴 완료하기'}
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={handleReset}
+          disabled={loading}
+          className="w-1/3 bg-gray-100 text-gray-500 font-bold py-4 rounded-2xl hover:bg-gray-200 transition-all disabled:opacity-50"
+        >
+          초기화
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={loading}
+          className="w-2/3 bg-blue-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-600 active:scale-95 transition-all disabled:bg-gray-300"
+        >
+          {loading ? '저장 중...' : '오늘의 루틴 완료하기'}
+        </button>
+      </div>
     </div>
   );
 };

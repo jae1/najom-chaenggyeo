@@ -45,11 +45,17 @@ ALTER TABLE skin_care ENABLE ROW LEVEL SECURITY;
 ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
 
 -- Create policies (including mock user bypass)
+-- Daily Health
 CREATE POLICY "Users can manage their own daily health" ON daily_health
-    FOR ALL USING (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000');
+    FOR ALL USING (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000')
+    WITH CHECK (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000');
 
+-- Skin Care
 CREATE POLICY "Users can manage their own skin care" ON skin_care
-    FOR ALL USING (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000');
+    FOR ALL USING (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000')
+    WITH CHECK (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000');
 
+-- Push Subscriptions
 CREATE POLICY "Users can manage their own push subscriptions" ON push_subscriptions
-    FOR ALL USING (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000');
+    FOR ALL USING (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000')
+    WITH CHECK (auth.uid() = user_id OR user_id = '00000000-0000-0000-0000-000000000000');

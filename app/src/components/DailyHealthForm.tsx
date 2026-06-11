@@ -46,6 +46,8 @@ const DailyHealthForm: React.FC = () => {
   const handleSave = async () => {
     if (!user) return;
     setLoading(true);
+    
+    // Explicitly using upsert with the unique constraint in mind
     const { error } = await supabase.from('daily_health').upsert({
       user_id: user.id,
       date: today,
@@ -56,10 +58,39 @@ const DailyHealthForm: React.FC = () => {
       bowel_movement: data.bowel_movement,
       period: data.period,
       condition: data.condition,
-    });
+    }, { onConflict: 'user_id,date' });
+
     setLoading(false);
     if (error) alert('저장 실패: ' + error.message);
-    else alert('오늘의 건강 기록이 저장되었습니다! ✨');
+    else alert('오늘의 건강 기록이 업데이트되었습니다! ✨');
+  };
+
+  const handleReset = async () => {
+    if (!window.confirm('오늘의 건강 기록을 삭제할까요?')) return;
+    if (!user) return;
+    
+    setLoading(true);
+    const { error } = await supabase
+      .from('daily_health')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('date', today);
+    
+    if (!error) {
+      setData({
+        weight: '',
+        water_intake: 0,
+        sleep_hours: '',
+        exercise_done: false,
+        bowel_movement: false,
+        period: false,
+        condition: 3,
+      });
+      alert('오늘의 기록이 초기화되었습니다.');
+    } else {
+      alert('초기화 실패: ' + error.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -147,13 +178,22 @@ const DailyHealthForm: React.FC = () => {
         </div>
       </div>
 
-      <button
-        onClick={handleSave}
-        disabled={loading}
-        className="w-full bg-primary-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-pink-100 hover:bg-primary-600 active:scale-95 transition-all disabled:bg-gray-300"
-      >
-        {loading ? '저장 중...' : '오늘의 건강 기록하기'}
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={handleReset}
+          disabled={loading}
+          className="w-1/3 bg-gray-100 text-gray-500 font-bold py-4 rounded-2xl hover:bg-gray-200 transition-all disabled:opacity-50"
+        >
+          초기화
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={loading}
+          className="w-2/3 bg-primary-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-pink-100 hover:bg-primary-600 active:scale-95 transition-all disabled:bg-gray-300"
+        >
+          {loading ? '저장 중...' : '오늘의 건강 기록하기'}
+        </button>
+      </div>
     </div>
   );
 };

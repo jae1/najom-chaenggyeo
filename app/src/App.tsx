@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import Today from './pages/Today';
+import History from './pages/History';
 import BottomNav from './components/BottomNav';
 
 const queryClient = new QueryClient();
@@ -23,7 +24,7 @@ const AuthenticatedApp = () => {
     <div className="px-4 pb-20">
       <Routes>
         <Route path="/" element={<Today />} />
-        <Route path="/history" element={<div>기록 페이지 (준비 중)</div>} />
+        <Route path="/history" element={<History />} />
         <Route path="/profile" element={<div>내 정보 페이지 (준비 중)</div>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
